@@ -380,7 +380,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             
             <form id="lead-form" style="display: flex; flex-direction: column; gap: 12px;">
                 <input type="text" id="lead-nombre" placeholder="Tu nombre" required style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95em;">
-                <input type="text" id="lead-nombre" placeholder="Tu apellido" required style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95em;">
+                <input type="text" id="lead-apellido" placeholder="Tu apellido" required style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95em;">
                 <input type="email" id="lead-email" placeholder="Tu correo electrónico" required style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95em;">
                 
                 <select id="lead-tipo" style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; background: white; font-size: 0.95em;">
@@ -684,11 +684,11 @@ detailElements.forEach(function(elem) {
                 leadForm.addEventListener('submit', function(e) {
                     e.preventDefault();
 
-                    // Reemplaza esta URL con la que copiaste al publicar en Google Apps Script:
                     var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhv5iJ7utsjae9RRct1-cu8K3t0OPwS-oBw0zLV31SjTFsn3mcdFqrrHG5t0fXBUk--A/exec"; 
 
                     var leadData = {
                         nombre: document.getElementById('lead-nombre').value,
+                        apellido: document.getElementById('lead-apellido').value,
                         email: document.getElementById('lead-email').value,
                         tipo: document.getElementById('lead-tipo').value
                     };
