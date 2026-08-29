@@ -379,27 +379,31 @@
         document.addEventListener('DOMContentLoaded', function() {
             
             // --- 1. ABRIR MODAL DE DETALLES ---
-            var detailElements = document.querySelectorAll('.btn-detail');
-            detailElements.forEach(function(elem) {
-                elem.addEventListener('click', function(e) {
-                    var card = elem.closest('.card');
-                    activeProduct = {
-                        id: card.getAttribute('data-id'),
-                        name: card.getAttribute('data-name'),
-                        category: card.getAttribute('data-category'),
-                        price: parseFloat(card.getAttribute('data-price')),
-                        img: card.getAttribute('data-img'),
-                        desc: card.getAttribute('data-desc'),
-                        specs: card.getAttribute('data-specs')
-                    };
+var detailElements = document.querySelectorAll('.btn-detail');
+detailElements.forEach(function(elem) {
+    elem.addEventListener('click', function(e) {
+        var card = elem.closest('.card');
+        
+        // Lee directamente la imagen visible en la tarjeta
+        var visibleImg = card.querySelector('.card-img').getAttribute('src');
 
-                    document.getElementById('modal-img').src = activeProduct.img;
-                    document.getElementById('modal-title').innerText = activeProduct.name;
-                    document.getElementById('modal-price').innerText = '$' + activeProduct.price.toLocaleString('es-AR');
-                    document.getElementById('modal-desc').innerText = activeProduct.desc;
-                    document.getElementById('modal-specs').innerText = activeProduct.specs;
+        activeProduct = {
+            id: card.getAttribute('data-id'),
+            name: card.getAttribute('data-name'),
+            category: card.getAttribute('data-category'),
+            price: parseFloat(card.getAttribute('data-price')),
+            img: visibleImg, // Usa la imagen actual del HTML
+            desc: card.getAttribute('data-desc'),
+            specs: card.getAttribute('data-specs')
+        };
 
-                    document.getElementById('product-modal').style.display = 'flex';
+        document.getElementById('modal-img').src = activeProduct.img;
+        document.getElementById('modal-title').innerText = activeProduct.name;
+        document.getElementById('modal-price').innerText = '$' + activeProduct.price.toLocaleString('es-AR');
+        document.getElementById('modal-desc').innerText = activeProduct.desc;
+        document.getElementById('modal-specs').innerText = activeProduct.specs;
+
+        document.getElementById('product-modal').style.display = 'flex';
 
                     // EVENTO GA4: view_item (Ver producto)
                     window.dataLayer = window.dataLayer || [];
