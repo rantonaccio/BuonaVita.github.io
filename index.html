@@ -635,7 +635,7 @@ detailElements.forEach(function(elem) {
                 });
             }
 
-            // --- 3. CHECKOUT / COMPRAR ---
+            // Checkout / Comprar (Envío de Venta a Google Sheets + GA4)
             function triggerCheckout() {
                 if(cart.length === 0) {
                     alert('Tu carrito está vacío.');
@@ -643,6 +643,23 @@ detailElements.forEach(function(elem) {
                 }
                 
                 var total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+                // Reemplaza esta URL con tu enlace de Apps Script:
+                var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhv5iJ7utsjae9RRct1-cu8K3t0OPwS-oBw0zLV31SjTFsn3mcdFqrrHG5t0fXBUk--A/exec";
+
+                // Datos de la compra para enviar a Google Sheets
+                var saleData = {
+                    action: "sale",
+                    items: cart
+                };
+
+                // Envío asincrónico a Google Sheets
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(saleData)
+                });
 
                 // Evento GA4: begin_checkout
                 window.dataLayer = window.dataLayer || [];
