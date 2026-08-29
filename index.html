@@ -18,49 +18,82 @@
         body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; margin: 0; padding: 0; color: #2c2c2c; background-color: #faf8f5; line-height: 1.5; }
         
         /* Header & Navegación */
-        header { background-color: #ffffff; padding: 20px 40px; text-align: center; border-bottom: 1px solid #e2ded9; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 2.2em; letter-spacing: 4px; font-weight: 700; color: #1a1a1a; margin: 0; text-transform: uppercase; }
-        .tagline { font-size: 0.85em; letter-spacing: 2px; color: #8c827a; margin-top: 4px; text-transform: uppercase; }
-        nav { margin-top: 15px; }
-        nav a { margin: 0 18px; text-decoration: none; color: #555; font-weight: 500; font-size: 0.95em; transition: color 0.2s; }
+        header { background-color: #ffffff; padding: 20px 40px; border-bottom: 1px solid #e2ded9; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .header-brand { text-align: left; }
+        .logo { font-size: 2em; letter-spacing: 4px; font-weight: 700; color: #1a1a1a; margin: 0; text-transform: uppercase; }
+        .tagline { font-size: 0.8em; letter-spacing: 2px; color: #8c827a; margin-top: 2px; text-transform: uppercase; }
+        nav { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+        nav a { text-decoration: none; color: #555; font-weight: 500; font-size: 0.95em; transition: color 0.2s; }
         nav a:hover { color: #a3704c; }
 
+        /* Botón Carrito Header */
+        .cart-header-btn { background-color: #1a1a1a; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.9em; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .cart-header-btn:hover { background-color: #a3704c; }
+        .cart-badge { background-color: #a3704c; color: white; border-radius: 50%; padding: 2px 7px; font-size: 0.8em; }
+
         /* Hero Banner */
-        .hero { background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; text-align: center; padding: 100px 20px; color: #ffffff; }
-        .hero h2 { font-size: 3em; margin: 0 0 15px 0; font-weight: 300; letter-spacing: 1px; }
-        .hero p { font-size: 1.2em; max-width: 600px; margin: 0 auto 25px auto; font-weight: 300; opacity: 0.95; }
+        .hero { background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; text-align: center; padding: 90px 20px; color: #ffffff; }
+        .hero h2 { font-size: 2.8em; margin: 0 0 15px 0; font-weight: 300; letter-spacing: 1px; }
+        .hero p { font-size: 1.1em; max-width: 600px; margin: 0 auto 25px auto; font-weight: 300; opacity: 0.95; }
         
-        /* Botones */
-        .btn { display: inline-block; background-color: #1a1a1a; color: #ffffff; padding: 12px 28px; border: none; cursor: pointer; text-decoration: none; border-radius: 2px; font-size: 0.9em; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s ease; }
+        /* Botones generales */
+        .btn { display: inline-block; background-color: #1a1a1a; color: #ffffff; padding: 10px 22px; border: none; cursor: pointer; text-decoration: none; border-radius: 2px; font-size: 0.85em; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s ease; text-align: center; }
         .btn:hover { background-color: #a3704c; color: #ffffff; }
-        .btn-card { width: 100%; margin-top: 12px; background-color: #2c2c2c; }
+        .btn-secondary { background-color: #e8e4df; color: #1a1a1a; }
+        .btn-secondary:hover { background-color: #d8d3cc; color: #1a1a1a; }
         
         /* Secciones de Catálogo */
-        .container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; }
-        .section-title { text-align: center; font-size: 2em; margin-bottom: 10px; color: #1a1a1a; font-weight: 400; letter-spacing: 1px; }
-        .section-subtitle { text-align: center; color: #777; margin-bottom: 40px; font-size: 1em; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .section-title { text-align: center; font-size: 2em; margin-bottom: 8px; color: #1a1a1a; font-weight: 400; letter-spacing: 1px; }
+        .section-subtitle { text-align: center; color: #777; margin-bottom: 35px; font-size: 0.95em; }
         
-        .grid-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .grid-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-bottom: 50px; }
         
         /* Tarjetas de Producto */
         .card { background: #ffffff; border: 1px solid #e8e4df; border-radius: 6px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
-        .card-img-wrapper { position: relative; width: 100%; height: 260px; overflow: hidden; background-color: #f0ede8; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,0.06); }
+        .card-img-wrapper { position: relative; width: 100%; height: 240px; overflow: hidden; background-color: #f0ede8; cursor: pointer; }
         .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
         .card:hover .card-img { transform: scale(1.05); }
         .badge { position: absolute; top: 12px; left: 12px; background-color: #a3704c; color: white; padding: 4px 10px; font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 2px; }
         
-        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-title { font-size: 1.15em; margin: 0 0 8px 0; color: #1a1a1a; font-weight: 600; }
-        .card-desc { font-size: 0.88em; color: #666; margin: 0 0 15px 0; line-height: 1.4; }
-        .card-price { font-size: 1.25em; font-weight: 700; color: #a3704c; margin-bottom: 15px; }
+        .card-body { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 1.1em; margin: 0 0 6px 0; color: #1a1a1a; font-weight: 600; cursor: pointer; }
+        .card-title:hover { color: #a3704c; }
+        .card-desc { font-size: 0.85em; color: #666; margin: 0 0 12px 0; line-height: 1.4; }
+        .card-price { font-size: 1.2em; font-weight: 700; color: #a3704c; margin-bottom: 12px; }
+        .card-actions { display: flex; gap: 8px; flex-direction: column; }
 
         /* Categorías destacadas */
-        .categories-banner { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 40px 0; }
-        .cat-card { position: relative; height: 180px; border-radius: 6px; overflow: hidden; color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        .categories-banner { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 30px 0 50px 0; }
+        .cat-card { position: relative; height: 160px; border-radius: 6px; overflow: hidden; color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .cat-card img { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.6); transition: filter 0.3s; }
         .cat-card:hover img { filter: brightness(0.45); }
-        .cat-title { position: relative; z-index: 2; font-size: 1.5em; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        .cat-title { position: relative; z-index: 2; font-size: 1.4em; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* MODAL DE DETALLES Y COMPRA */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background-color: #fff; border-radius: 8px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; display: flex; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; color: #888; cursor: pointer; z-index: 10; }
+        .close-modal:hover { color: #000; }
+        .modal-img-col { flex: 1; min-width: 300px; background-color: #f0ede8; }
+        .modal-img-col img { width: 100%; height: 100%; object-fit: cover; min-height: 350px; }
+        .modal-info-col { flex: 1; min-width: 300px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; }
+        .modal-title { font-size: 1.6em; margin: 0 0 10px 0; color: #1a1a1a; }
+        .modal-price { font-size: 1.5em; color: #a3704c; font-weight: 700; margin-bottom: 15px; }
+        .modal-details { font-size: 0.9em; color: #555; margin-bottom: 20px; line-height: 1.6; }
+        .modal-specs { background: #faf8f5; padding: 12px; border-radius: 4px; margin-bottom: 20px; font-size: 0.85em; }
+        .modal-actions { display: flex; gap: 10px; flex-direction: column; }
+
+        /* PANEL DEL CARRITO (SIDEBAR) */
+        .cart-sidebar { display: none; position: fixed; top: 0; right: 0; width: 350px; height: 100%; background-color: #fff; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 1001; padding: 20px; flex-direction: column; justify-content: space-between; }
+        .cart-sidebar.open { display: flex; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .cart-items { flex-grow: 1; overflow-y: auto; margin: 20px 0; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f9f9f9; padding-bottom: 10px; }
+        .cart-item-title { font-size: 0.9em; font-weight: 600; margin: 0; }
+        .cart-item-price { font-size: 0.85em; color: #a3704c; }
+        .cart-total { font-size: 1.2em; font-weight: 700; text-align: right; margin-bottom: 15px; }
 
         /* Footer / Contacto */
         footer { background-color: #1a1a1a; color: #cccccc; text-align: center; padding: 50px 20px 30px 20px; margin-top: 60px; border-top: 3px solid #a3704c; }
@@ -77,14 +110,17 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <header>
-        <div class="logo">Buona Vita</div>
-        <div class="tagline">Alfombras & Diseño de Interiores</div>
+        <div class="header-brand">
+            <div class="logo">Buona Vita</div>
+            <div class="tagline">Alfombras & Diseño de Interiores</div>
+        </div>
         <nav>
-            <a href="#destacados">Destacados</a>
             <a href="#nordicas">Nórdicas</a>
             <a href="#vinilicas">Vinílicas</a>
-            <a href="#yute">Yute Natural</a>
-            <a href="#contacto">Contacto</a>
+            <a href="#yute">Yute</a>
+            <button class="cart-header-btn" id="btn-open-cart">
+                🛒 Carrito <span class="cart-badge" id="cart-count">0</span>
+            </button>
         </nav>
     </header>
 
@@ -92,13 +128,12 @@
     <section class="hero">
         <h2>Diseño & Textura Para Tu Hogar</h2>
         <p>Explorá nuestra nueva colección de alfombras artesanales, diseñadas para transformar cada espacio.</p>
-        <!-- Evento Personalizado 1: Click en Banner Principal -->
         <a href="#nordicas" class="btn" id="btn-hero-banner" data-gtm-event="hero_banner_click">Ver Colección 2026</a>
     </section>
 
     <div class="container">
 
-        <!-- Banner de Categorías Rápida -->
+        <!-- Banner Categorías -->
         <div class="categories-banner">
             <a href="#nordicas" class="cat-card">
                 <img src="https://images.unsplash.com/photo-1575414003591-ece8d0416c7a?auto=format&fit=crop&w=600&q=80" alt="Lana y Nórdicas">
@@ -121,145 +156,166 @@
         <div class="grid-products">
             
             <!-- Producto 1 -->
-            <div class="card">
-                <div class="card-img-wrapper">
+            <div class="card" data-id="ALF-001" data-name="Alfombra Nórdica Cream" data-category="Nordicas" data-price="85000" data-img="https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=600&q=80" data-desc="100% lana pura de oveja tejida a mano. Ofrece una sensación única de calidez y máxima suavidad para espacios de relajación." data-specs="Medidas: 150x200 cm | Origen: Argentina | Mantenimiento: Limpieza en seco">
+                <div class="card-img-wrapper btn-detail">
                     <span class="badge">Más Vendido</span>
                     <img src="https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Alfombra Nórdica Cream">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Alfombra Nórdica Cream</h3>
-                        <p class="card-desc">100% lana pura de oveja. Medidas: 150x200 cm. Ideal para livings y dormitorios.</p>
+                        <h3 class="card-title btn-detail">Alfombra Nórdica Cream</h3>
+                        <p class="card-desc">100% lana pura de oveja. Medidas: 150x200 cm.</p>
                         <div class="card-price">$85.000</div>
                     </div>
-                    <!-- Evento Personalizado 2: Click en Producto (con Data Attributes para GTM) -->
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-001" data-product-name="Alfombra Nordica Cream" data-product-category="Nordicas" data-price="85000">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Producto 2 -->
-            <div class="card">
-                <div class="card-img-wrapper">
+            <div class="card" data-id="ALF-002" data-name="Alfombra Bereber Grey" data-category="Nordicas" data-price="110000" data-img="https://images.unsplash.com/photo-1575414003591-ece8d0416c7a?auto=format&fit=crop&w=600&q=80" data-desc="Diseño geométrico de estilo bereber atemporal en tonos grises y crudos. Confección artesanal de gran durabilidad." data-specs="Medidas: 180x240 cm | Material: Lana sintética de alto tránsito | Hipoalergénica">
+                <div class="card-img-wrapper btn-detail">
                     <img src="https://images.unsplash.com/photo-1575414003591-ece8d0416c7a?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Alfombra Bereber Grey">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Alfombra Bereber Grey</h3>
-                        <p class="card-desc">Diseño geométrico atemporal en tonos grises y crudos. Medidas: 180x240 cm.</p>
+                        <h3 class="card-title btn-detail">Alfombra Bereber Grey</h3>
+                        <p class="card-desc">Diseño geométrico en tonos grises y crudos.</p>
                         <div class="card-price">$110.000</div>
                     </div>
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-002" data-product-name="Alfombra Bereber Grey" data-product-category="Nordicas" data-price="110000">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Producto 3 -->
-            <div class="card">
-                <div class="card-img-wrapper">
+            <div class="card" data-id="ALF-003" data-name="Minimalist Off-White" data-category="Nordicas" data-price="68000" data-img="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" data-desc="Tejido de pelo alto ultrasónico. Ideal para dormitorios o salas de lectura por su textura envolvente." data-specs="Medidas: 120x180 cm | Estilo: Minimalista | Color: Blanco Cálido">
+                <div class="card-img-wrapper btn-detail">
                     <span class="badge">Nuevo</span>
-                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Alfombra Minimalist Off-White">
+                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Minimalist Off-White">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Minimalist Off-White</h3>
-                        <p class="card-desc">Tejido de pelo alto ultrasónico, máxima suavidad al tacto. Medidas: 120x180 cm.</p>
+                        <h3 class="card-title btn-detail">Minimalist Off-White</h3>
+                        <p class="card-desc">Tejido de pelo alto ultrasónico, máxima suavidad.</p>
                         <div class="card-price">$68.000</div>
                     </div>
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-003" data-product-name="Minimalist Off-White" data-product-category="Nordicas" data-price="68000">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
         </div>
 
-
-        <!-- Sección 2: Alfombras Vinílicas -->
+        <!-- Sección 2: Vinílicas -->
         <h2 class="section-title" id="vinilicas">Alfombras Vinílicas & Impermeables</h2>
         <p class="section-subtitle">Prácticas, lavables e ignífugas. La solución perfecta para cocinas, comedores y exteriores.</p>
 
         <div class="grid-products">
 
             <!-- Producto 4 -->
-            <div class="card">
-                <div class="card-img-wrapper">
+            <div class="card" data-id="ALF-004" data-name="Camino Vinílico Calacatta" data-category="Vinilicas" data-price="24500" data-img="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80" data-desc="Impresión digital de alta precisión símil mármol Calacatta. Se limpia pasando un trapo húmedo." data-specs="Medidas: 60x120 cm | Material: Vinilo PVC ignífugo | Antideslizante">
+                <div class="card-img-wrapper btn-detail">
                     <span class="badge">Lavable</span>
                     <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Camino Vinílico Calacatta">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Camino Vinílico Calacatta</h3>
-                        <p class="card-desc">Diseño símil mármol, ideal para mesadas y cocinas. Medidas: 60x120 cm.</p>
+                        <h3 class="card-title btn-detail">Camino Vinílico Calacatta</h3>
+                        <p class="card-desc">Diseño símil mármol, ideal para mesadas y cocinas.</p>
                         <div class="card-price">$24.500</div>
                     </div>
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-004" data-product-name="Camino Vinilico Calacatta" data-product-category="Vinilicas" data-price="24500">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Producto 5 -->
-            <div class="card">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Alfombra Vinílica Hidráulica">
+            <div class="card" data-id="ALF-005" data-name="Vinílica Mosaico Hidráulico" data-category="Vinilicas" data-price="49000" data-img="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" data-desc="Motivos geométricos retro que simulan baldosas hidráulicas. Resistente a manchas y alto tránsito." data-specs="Medidas: 140x200 cm | Grosor: 2mm | Impermeable 100%">
+                <div class="card-img-wrapper btn-detail">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Vinílica Mosaico Hidráulico">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Vinílica Mosaico Hidráulico</h3>
-                        <p class="card-desc">Estampa de azulejos antiguos en alta definición. Medidas: 140x200 cm.</p>
+                        <h3 class="card-title btn-detail">Vinílica Mosaico Hidráulico</h3>
+                        <p class="card-desc">Estampa de azulejos antiguos en alta definición.</p>
                         <div class="card-price">$49.000</div>
                     </div>
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-005" data-product-name="Vinilica Mosaico Hidraulico" data-product-category="Vinilicas" data-price="49000">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Producto 6 -->
-            <div class="card">
-                <div class="card-img-wrapper">
+            <div class="card" data-id="ALF-006" data-name="Camino Vinílico Botánico" data-category="Vinilicas" data-price="29000" data-img="https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=600&q=80" data-desc="Patrón de hojas tropicales en tonos verdes oliva. Ideal para pasillos y bajo lavaderos." data-specs="Medidas: 50x150 cm | Apto para mascotas | Antiácaros">
+                <div class="card-img-wrapper btn-detail">
                     <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Camino Vinílico Botánico">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Camino Vinílico Botánico</h3>
-                        <p class="card-desc">Antideslizante de alta resistencia, apto para mascotas. Medidas: 50x150 cm.</p>
+                        <h3 class="card-title btn-detail">Camino Vinílico Botánico</h3>
+                        <p class="card-desc">Antideslizante de alta resistencia, apto para mascotas.</p>
                         <div class="card-price">$29.000</div>
                     </div>
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-006" data-product-name="Camino Vinilico Botanico" data-product-category="Vinilicas" data-price="29000">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
         </div>
 
-
-        <!-- Sección 3: Yute y Fibras Naturales -->
+        <!-- Sección 3: Yute -->
         <h2 class="section-title" id="yute">Fibras Naturales & Yute</h2>
         <p class="section-subtitle">Ecológicas y orgánicas, aportan calidez y frescura a tus ambientes.</p>
 
         <div class="grid-products">
 
             <!-- Producto 7 -->
-            <div class="card">
-                <div class="card-img-wrapper">
+            <div class="card" data-id="ALF-007" data-name="Alfombra Yute Circular" data-category="Yute" data-price="55000" data-img="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" data-desc="Confeccionada 100% a mano con hilo de yute orgánico. Aporta textura y estilo rústico nórdico." data-specs="Diámetro: 150 cm | 100% Yute Biodegradable | Confección manual">
+                <div class="card-img-wrapper btn-detail">
                     <span class="badge">Eco Friendly</span>
                     <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Alfombra Yute Circular">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Alfombra Yute Circular</h3>
-                        <p class="card-desc">Tejida a mano con hilo de yute 100% natural. Diámetro: 150 cm.</p>
+                        <h3 class="card-title btn-detail">Alfombra Yute Circular</h3>
+                        <p class="card-desc">Tejida a mano con hilo de yute 100% natural.</p>
                         <div class="card-price">$55.000</div>
                     </div>
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-007" data-product-name="Alfombra Yute Circular" data-product-category="Yute" data-price="55000">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Producto 8 -->
-            <div class="card">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1595248654210-211134107147?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Alfombra Yute & Algodón Black">
+            <div class="card" data-id="ALF-008" data-name="Yute & Algodón Black" data-category="Yute" data-price="78000" data-img="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" data-desc="Combinación perfecta entre el trenzado de yute rústico y patrones geométricos en hilo de algodón negro." data-specs="Medidas: 160x230 cm | Material: 70% Yute / 30% Algodón | Reversible">
+                <div class="card-img-wrapper btn-detail">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" class="card-img" alt="Yute & Algodón Black">
                 </div>
                 <div class="card-body">
                     <div>
-                        <h3 class="card-title">Yute & Algodón Black</h3>
-                        <p class="card-desc">Combinación de trama rústica de yute con líneas de algodón negro. Medidas: 160x230 cm.</p>
+                        <h3 class="card-title btn-detail">Yute & Algodón Black</h3>
+                        <p class="card-desc">Combinación de trama rústica de yute con algodón negro.</p>
                         <div class="card-price">$78.000</div>
                     </div>
-                    <button class="btn btn-card btn-producto" data-product-id="ALF-008" data-product-name="Yute y Algodon Black" data-product-category="Yute" data-price="78000">Consultar Precio</button>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-detail">Ver Detalles</button>
+                        <button class="btn btn-add-cart">Añadir al Carrito</button>
+                    </div>
                 </div>
             </div>
 
@@ -267,54 +323,236 @@
 
     </div>
 
-    <!-- Footer / Sección de Contacto -->
+    <!-- MODAL DE DETALLES -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <div class="modal-img-col">
+                <img id="modal-img" src="" alt="Producto">
+            </div>
+            <div class="modal-info-col">
+                <div>
+                    <h2 class="modal-title" id="modal-title">Título Producto</h2>
+                    <div class="modal-price" id="modal-price">$0</div>
+                    <div class="modal-details" id="modal-desc">Descripción detallada...</div>
+                    <div class="modal-specs" id="modal-specs">Especificaciones...</div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn" id="modal-btn-add">Añadir al Carrito</button>
+                    <button class="btn btn-secondary" id="modal-btn-buy">Comprar Ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR DE CARRITO -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Tu Carrito</h3>
+            <span style="cursor:pointer; font-size:1.5em;" id="close-cart">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p style="color:#888; text-align:center;">El carrito está vacío.</p>
+        </div>
+        <div>
+            <div class="cart-total" id="cart-total">Total: $0</div>
+            <button class="btn" style="width:100%;" id="btn-checkout">Finalizar Compra / Checkout</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer id="contacto">
         <h3>Atención Personalizada</h3>
         <p>¿Necesitás asesoramiento sobre medidas o ventas al por mayor? Ponete en contacto con nuestro equipo comercial.</p>
-        
-        <!-- Evento Personalizado 3: Click en WhatsApp / Contacto -->
         <button class="btn" id="btn-whatsapp" data-gtm-event="whatsapp_contact_click">Contactar por WhatsApp</button>
-
         <div class="footer-links">
-            <p>Le Tapis © 2026 - Todos los derechos reservados.</p>
+            <p>Buona Vita © 2026 - Todos los derechos reservados.</p>
             <p>Sitio web desarrollado para el TPO de Inteligencia de Negocios y Analítica Digital (UADE).</p>
         </div>
     </footer>
 
-    <!-- Script de Captura de Eventos para Google Tag Manager (dataLayer Push) -->
+    <!-- SCRIPT DE LÓGICA INTERACTIVA Y GA4/GTM DATALAYER -->
     <script>
+        var cart = [];
+        var activeProduct = null;
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Evento 1: Clics en botones de producto
-            var productButtons = document.querySelectorAll('.btn-producto');
-            productButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var productName = this.getAttribute('data-product-name');
-                    var productId = this.getAttribute('data-product-id');
-                    var productCategory = this.getAttribute('data-product-category');
-                    var price = this.getAttribute('data-price');
-                    
+            
+            // --- 1. ABRIR MODAL DE DETALLES ---
+            var detailElements = document.querySelectorAll('.btn-detail');
+            detailElements.forEach(function(elem) {
+                elem.addEventListener('click', function(e) {
+                    var card = elem.closest('.card');
+                    activeProduct = {
+                        id: card.getAttribute('data-id'),
+                        name: card.getAttribute('data-name'),
+                        category: card.getAttribute('data-category'),
+                        price: parseFloat(card.getAttribute('data-price')),
+                        img: card.getAttribute('data-img'),
+                        desc: card.getAttribute('data-desc'),
+                        specs: card.getAttribute('data-specs')
+                    };
+
+                    document.getElementById('modal-img').src = activeProduct.img;
+                    document.getElementById('modal-title').innerText = activeProduct.name;
+                    document.getElementById('modal-price').innerText = '$' + activeProduct.price.toLocaleString('es-AR');
+                    document.getElementById('modal-desc').innerText = activeProduct.desc;
+                    document.getElementById('modal-specs').innerText = activeProduct.specs;
+
+                    document.getElementById('product-modal').style.display = 'flex';
+
+                    // EVENTO GA4: view_item (Ver producto)
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({
-                        'event': 'select_item_custom',
-                        'item_id': productId,
-                        'item_name': productName,
-                        'item_category': productCategory,
-                        'price': price
+                        'event': 'view_item',
+                        'ecommerce': {
+                            'items': [{
+                                'item_id': activeProduct.id,
+                                'item_name': activeProduct.name,
+                                'item_category': activeProduct.category,
+                                'price': activeProduct.price
+                            }]
+                        }
                     });
                 });
             });
 
-            // Evento 2: Clic en WhatsApp
-            var wsButton = document.getElementById('btn-whatsapp');
-            if(wsButton) {
-                wsButton.addEventListener('click', function() {
-                    window.dataLayer = window.dataLayer || [];
-                    window.dataLayer.push({
-                        'event': 'whatsapp_click',
-                        'click_location': 'footer'
-                    });
+            // Cerrar Modal
+            document.getElementById('close-modal').addEventListener('click', function() {
+                document.getElementById('product-modal').style.display = 'none';
+            });
+
+            // --- 2. LÓGICA DE AÑADIR AL CARRITO ---
+            function addToCart(product) {
+                cart.push(product);
+                updateCartUI();
+                
+                // EVENTO GA4: add_to_cart
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'event': 'add_to_cart',
+                    'ecommerce': {
+                        'currency': 'ARS',
+                        'value': product.price,
+                        'items': [{
+                            'item_id': product.id,
+                            'item_name': product.name,
+                            'item_category': product.category,
+                            'price': product.price,
+                            'quantity': 1
+                        }]
+                    }
                 });
             }
+
+            // Clic en "Añadir al carrito" desde la tarjeta
+            var addCartBtns = document.querySelectorAll('.btn-add-cart');
+            addCartBtns.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    var card = btn.closest('.card');
+                    var product = {
+                        id: card.getAttribute('data-id'),
+                        name: card.getAttribute('data-name'),
+                        category: card.getAttribute('data-category'),
+                        price: parseFloat(card.getAttribute('data-price'))
+                    };
+                    addToCart(product);
+                    document.getElementById('cart-sidebar').classList.add('open');
+                });
+            });
+
+            // Clic en "Añadir al carrito" desde el Modal
+            document.getElementById('modal-btn-add').addEventListener('click', function() {
+                if(activeProduct) {
+                    addToCart(activeProduct);
+                    document.getElementById('product-modal').style.display = 'none';
+                    document.getElementById('cart-sidebar').classList.add('open');
+                }
+            });
+
+            // Clic en "Comprar Ahora" desde el Modal
+            document.getElementById('modal-btn-buy').addEventListener('click', function() {
+                if(activeProduct) {
+                    addToCart(activeProduct);
+                    document.getElementById('product-modal').style.display = 'none';
+                    triggerCheckout();
+                }
+            });
+
+            // --- 3. ACTUALIZAR PANEL DE CARRITO ---
+            function updateCartUI() {
+                var cartCountElem = document.getElementById('cart-count');
+                var cartItemsElem = document.getElementById('cart-items');
+                var cartTotalElem = document.getElementById('cart-total');
+
+                cartCountElem.innerText = cart.length;
+
+                if (cart.length === 0) {
+                    cartItemsElem.innerHTML = '<p style="color:#888; text-align:center;">El carrito está vacío.</p>';
+                    cartTotalElem.innerText = 'Total: $0';
+                    return;
+                }
+
+                var html = '';
+                var total = 0;
+                cart.forEach(function(item, index) {
+                    total += item.price;
+                    html += '<div class="cart-item">' +
+                        '<div>' +
+                            '<p class="cart-item-title">' + item.name + '</p>' +
+                            '<span class="cart-item-price">$' + item.price.toLocaleString('es-AR') + '</span>' +
+                        '</div>' +
+                    '</div>';
+                });
+
+                cartItemsElem.innerHTML = html;
+                cartTotalElem.innerText = 'Total: $' + total.toLocaleString('es-AR');
+            }
+
+            // Abrir y Cerrar Sidebar de Carrito
+            document.getElementById('btn-open-cart').addEventListener('click', function() {
+                document.getElementById('cart-sidebar').classList.add('open');
+            });
+            document.getElementById('close-cart').addEventListener('click', function() {
+                document.getElementById('cart-sidebar').classList.remove('open');
+            });
+
+            // --- 4. CHECKOUT / COMPRAR ---
+            function triggerCheckout() {
+                if(cart.length === 0) {
+                    alert('Tu carrito está vacío.');
+                    return;
+                }
+                
+                var total = cart.reduce((sum, item) => sum + item.price, 0);
+
+                // EVENTO GA4: begin_checkout
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'event': 'begin_checkout',
+                    'ecommerce': {
+                        'currency': 'ARS',
+                        'value': total,
+                        'items': cart
+                    }
+                });
+
+                alert('¡Gracias por tu compra de prueba!.');
+                cart = [];
+                updateCartUI();
+                document.getElementById('cart-sidebar').classList.remove('open');
+            }
+
+            document.getElementById('btn-checkout').addEventListener('click', triggerCheckout);
+
+            // WhatsApp Event
+            document.getElementById('btn-whatsapp').addEventListener('click', function() {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'event': 'whatsapp_click',
+                    'click_location': 'footer'
+                });
+            });
         });
     </script>
 
