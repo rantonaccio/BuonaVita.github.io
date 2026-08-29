@@ -652,7 +652,50 @@ detailElements.forEach(function(elem) {
                     });
                 });
             }
+
+            // --- LÓGICA DE ENVÍO DE LEADS A GOOGLE SHEETS ---
+            var leadForm = document.getElementById('lead-form');
+            if(leadForm) {
+                leadForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // Reemplaza esta URL con la que copiaste al publicar en Google Apps Script:
+                    var SCRIPT_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT"; 
+
+                    var leadData = {
+                        nombre: document.getElementById('lead-nombre').value,
+                        email: document.getElementById('lead-email').value,
+                        tipo: document.getElementById('lead-tipo').value
+                    };
+
+                    var statusElem = document.getElementById('lead-status');
+                    statusElem.innerText = "Enviando tus datos...";
+                    statusElem.style.color = "#a3704c";
+                    statusElem.style.display = "block";
+
+                    fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(leadData)
+                    })
+                    .then(function() {
+                        statusElem.innerText = "¡Gracias! Te enviamos el catálogo a tu correo.";
+                        statusElem.style.color = "#27ae60";
+                        leadForm.reset();
+
+                        // Evento GA4: generate_lead
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({
+                            'event': 'generate_lead',
+                            'lead_type': leadData.tipo
+                        });
+                    })
+                    .catch(function(error) {
+                        statusElem.innerText = "Ocurrió un error. Por favor intentá de nuevo.";
+                        statusElem.style.color = "#c0392b";
+                    });
+                });
+            }
         });
     </script>
-</body>
-</html>
