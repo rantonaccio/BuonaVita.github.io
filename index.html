@@ -427,8 +427,10 @@ detailElements.forEach(function(elem) {
             });
 
             // --- 2. LÓGICA DE CARRITO (CANTIDADES Y ELIMINACIÓN) ---
+
+            // 1. Agregar producto al carrito (suma cantidad si ya existe)
             function addToCart(product) {
-                var existingItem = cart.find(item => item.id === product.id);
+                var existingItem = cart.find(i => i.id === product.id);
                 
                 if (existingItem) {
                     existingItem.quantity += 1;
@@ -439,7 +441,7 @@ detailElements.forEach(function(elem) {
                 
                 updateCartUI();
                 
-                // EVENTO GA4: add_to_cart
+                // Evento Ecommerce GA4: add_to_cart
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
                     'event': 'add_to_cart',
@@ -457,8 +459,9 @@ detailElements.forEach(function(elem) {
                 });
             }
 
+            // 2. Cambiar cantidad (+ / -) desde el carrito
             function changeQuantity(id, delta) {
-                var item = cart.find(item => item.id === id);
+                var item = cart.find(i => i.id === id);
                 if (item) {
                     item.quantity += delta;
                     if (item.quantity <= 0) {
@@ -469,12 +472,13 @@ detailElements.forEach(function(elem) {
                 }
             }
 
+            // 3. Eliminar producto con el tacho de basura
             function removeFromCart(id) {
-                var itemIndex = cart.findIndex(item => item.id === id);
+                var itemIndex = cart.findIndex(i => i.id === id);
                 if (itemIndex > -1) {
                     var removedItem = cart[itemIndex];
                     
-                    // EVENTO GA4: remove_from_cart
+                    // Evento Ecommerce GA4: remove_from_cart
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({
                         'event': 'remove_from_cart',
@@ -495,17 +499,18 @@ detailElements.forEach(function(elem) {
                 }
             }
 
+            // 4. Renderizar la interfaz del carrito y calcular totales
             function updateCartUI() {
                 var cartCountElem = document.getElementById('cart-count');
                 var cartItemsElem = document.getElementById('cart-items');
                 var cartTotalElem = document.getElementById('cart-total');
 
                 var totalUnits = cart.reduce((sum, item) => sum + item.quantity, 0);
-                cartCountElem.innerText = totalUnits;
+                if(cartCountElem) cartCountElem.innerText = totalUnits;
 
                 if (cart.length === 0) {
-                    cartItemsElem.innerHTML = '<p style="color:#888; text-align:center;">El carrito está vacío.</p>';
-                    cartTotalElem.innerText = 'Total: $0';
+                    if(cartItemsElem) cartItemsElem.innerHTML = '<p style="color:#888; text-align:center; padding: 20px 0;">El carrito está vacío.</p>';
+                    if(cartTotalElem) cartTotalElem.innerText = 'Total: $0';
                     return;
                 }
 
@@ -519,27 +524,29 @@ detailElements.forEach(function(elem) {
                     html += `
                         <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
                             <div style="flex-grow:1;">
-                                <p class="cart-item-title" style="margin:0; font-weight:600; font-size:0.9em;">${item.name}</p>
-                                <span class="cart-item-price" style="color:#a3704c; font-size:0.85em;">$${item.price.toLocaleString('es-AR')} x ${item.quantity} = <strong>$${itemSubtotal.toLocaleString('es-AR')}</strong></span>
+                                <p class="cart-item-title" style="margin:0; font-weight:600; font-size:0.9em; color:#1a1a1a;">${item.name}</p>
+                                <span class="cart-item-price" style="color:#a3704c; font-size:0.85em;">
+                                    $${item.price.toLocaleString('es-AR')} x ${item.quantity} = <strong>$${itemSubtotal.toLocaleString('es-AR')}</strong>
+                                </span>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
-                                <button onclick="changeQuantity('${item.id}', -1)" style="background:#e8e4df; border:none; width:24px; height:24px; cursor:pointer; border-radius:3px; font-weight:bold;">-</button>
-                                <span style="font-size:0.9em; font-weight:bold;">${item.quantity}</span>
-                                <button onclick="changeQuantity('${item.id}', 1)" style="background:#e8e4df; border:none; width:24px; height:24px; cursor:pointer; border-radius:3px; font-weight:bold;">+</button>
-                                <button onclick="removeFromCart('${item.id}')" style="background:transparent; border:none; color:#c0392b; cursor:pointer; font-size:1.1em; margin-left:6px;" title="Eliminar">🗑️</button>
+                                <button type="button" onclick="changeQuantity('${item.id}', -1)" style="background:#e8e4df; border:none; width:26px; height:26px; cursor:pointer; border-radius:3px; font-weight:bold; font-size:1em;">-</button>
+                                <span style="font-size:0.9em; font-weight:bold; min-width:16px; text-align:center;">${item.quantity}</span>
+                                <button type="button" onclick="changeQuantity('${item.id}', 1)" style="background:#e8e4df; border:none; width:26px; height:26px; cursor:pointer; border-radius:3px; font-weight:bold; font-size:1em;">+</button>
+                                <button type="button" onclick="removeFromCart('${item.id}')" style="background:transparent; border:none; color:#c0392b; cursor:pointer; font-size:1.2em; margin-left:6px;" title="Eliminar producto">🗑️</button>
                             </div>
                         </div>
                     `;
                 });
 
-                cartItemsElem.innerHTML = html;
-                cartTotalElem.innerText = 'Total: $' + totalAmount.toLocaleString('es-AR');
+                if(cartItemsElem) cartItemsElem.innerHTML = html;
+                if(cartTotalElem) cartTotalElem.innerText = 'Total: $' + totalAmount.toLocaleString('es-AR');
             }
 
-            // Clic en "Añadir al carrito" desde la tarjeta
+            // Escuchadores de eventos para los botones de las tarjetas y modal
             var addCartBtns = document.querySelectorAll('.btn-add-cart');
             addCartBtns.forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
+                btn.addEventListener('click', function() {
                     var card = btn.closest('.card');
                     var product = {
                         id: card.getAttribute('data-id'),
@@ -552,42 +559,55 @@ detailElements.forEach(function(elem) {
                 });
             });
 
-            // Clic en "Añadir al carrito" desde el Modal
-            document.getElementById('modal-btn-add').addEventListener('click', function() {
-                if(activeProduct) {
-                    addToCart(activeProduct);
-                    document.getElementById('product-modal').style.display = 'none';
+            // Botón "Añadir al carrito" desde el Modal
+            var modalAddBtn = document.getElementById('modal-btn-add');
+            if(modalAddBtn) {
+                modalAddBtn.addEventListener('click', function() {
+                    if(activeProduct) {
+                        addToCart(activeProduct);
+                        document.getElementById('product-modal').style.display = 'none';
+                        document.getElementById('cart-sidebar').classList.add('open');
+                    }
+                });
+            }
+
+            // Botón "Comprar Ahora" desde el Modal
+            var modalBuyBtn = document.getElementById('modal-btn-buy');
+            if(modalBuyBtn) {
+                modalBuyBtn.addEventListener('click', function() {
+                    if(activeProduct) {
+                        addToCart(activeProduct);
+                        document.getElementById('product-modal').style.display = 'none';
+                        triggerCheckout();
+                    }
+                });
+            }
+
+            // Abrir y Cerrar Panel Lateral del Carrito
+            var openCartBtn = document.getElementById('btn-open-cart');
+            if(openCartBtn) {
+                openCartBtn.addEventListener('click', function() {
                     document.getElementById('cart-sidebar').classList.add('open');
-                }
-            });
+                });
+            }
 
-            // Clic en "Comprar Ahora" desde el Modal
-            document.getElementById('modal-btn-buy').addEventListener('click', function() {
-                if(activeProduct) {
-                    addToCart(activeProduct);
-                    document.getElementById('product-modal').style.display = 'none';
-                    triggerCheckout();
-                }
-            });
+            var closeCartBtn = document.getElementById('close-cart');
+            if(closeCartBtn) {
+                closeCartBtn.addEventListener('click', function() {
+                    document.getElementById('cart-sidebar').classList.remove('open');
+                });
+            }
 
-            // Abrir y Cerrar Sidebar de Carrito
-            document.getElementById('btn-open-cart').addEventListener('click', function() {
-                document.getElementById('cart-sidebar').classList.add('open');
-            });
-            document.getElementById('close-cart').addEventListener('click', function() {
-                document.getElementById('cart-sidebar').classList.remove('open');
-            });
-
-            // --- 4. CHECKOUT / COMPRAR ---
+            // --- 3. CHECKOUT / COMPRAR ---
             function triggerCheckout() {
                 if(cart.length === 0) {
                     alert('Tu carrito está vacío.');
                     return;
                 }
                 
-                var total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+                var total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-                // EVENTO GA4: begin_checkout
+                // Evento GA4: begin_checkout
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
                     'event': 'begin_checkout',
@@ -604,16 +624,21 @@ detailElements.forEach(function(elem) {
                 document.getElementById('cart-sidebar').classList.remove('open');
             }
 
-            document.getElementById('btn-checkout').addEventListener('click', triggerCheckout);
+            var checkoutBtn = document.getElementById('btn-checkout');
+            if(checkoutBtn) {
+                checkoutBtn.addEventListener('click', triggerCheckout);
+            }
 
-            // WhatsApp Event
-            document.getElementById('btn-whatsapp').addEventListener('click', function() {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    'event': 'whatsapp_click',
-                    'click_location': 'footer'
+            // Clic WhatsApp
+            var wsBtn = document.getElementById('btn-whatsapp');
+            if(wsBtn) {
+                wsBtn.addEventListener('click', function() {
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                        'event': 'whatsapp_click',
+                        'click_location': 'footer'
+                    });
                 });
-            });
         });
     </script>
 
