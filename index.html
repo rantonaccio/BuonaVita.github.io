@@ -347,15 +347,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </div>
 
-    <!-- SIDEBAR DE CARRITO -->
+    <!-- SIDEBAR DE CARRITO DINÁMICO -->
     <div id="cart-sidebar" class="cart-sidebar">
-        <div class="cart-header">
-            <h3>Tu Carrito</h3>
-            <span style="cursor:pointer; font-size:1.5em;" id="close-cart">&times;</span>
+        <div>
+            <div class="cart-header">
+                <h3>Tu Carrito</h3>
+                <span style="cursor:pointer; font-size:1.5em;" id="close-cart">&times;</span>
+            </div>
+            <!-- Sub-header con botón para vaciar todo -->
+            <div class="cart-sub-header" id="cart-sub-header" style="display:none; justify-content:space-between; align-items:center; margin-top:10px; padding-bottom:10px; border-bottom:1px solid #f2f2f2;">
+                <span style="font-size:0.85em; color:#666;">Productos seleccionados</span>
+                <button type="button" id="btn-clear-cart" style="background:transparent; color:#c0392b; border:1px solid #c0392b; padding:4px 8px; font-size:0.75em; border-radius:3px; cursor:pointer; font-weight:600;" title="Vaciar todo el carrito">Vaciar Carrito</button>
+            </div>
         </div>
+        
         <div class="cart-items" id="cart-items">
-            <p style="color:#888; text-align:center;">El carrito está vacío.</p>
+            <p style="color:#888; text-align:center; padding: 20px 0;">El carrito está vacío.</p>
         </div>
+        
         <div>
             <div class="cart-total" id="cart-total">Total: $0</div>
             <button class="btn" style="width:100%;" id="btn-checkout">Finalizar Compra / Checkout</button>
@@ -410,41 +419,154 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 </footer>
 
-    <!-- SCRIPT DE LÓGICA INTERACTIVA Y GA4/GTM DATALAYER -->
+   <!-- SCRIPT DE LÓGICA INTERACTIVA Y GA4/GTM DATALAYER -->
     <script>
         var cart = [];
         var activeProduct = null;
 
+        // --- FUNCIONES GLOBALIZADAS PARA MANEJO DEL CARRITO ---
+        
+        // 1. Cambiar cantidad (+1 / -1) desde el carrito
+        window.changeQuantity = function(id, delta) {
+            var item = cart.find(i => i.id === id);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    window.removeFromCart(id);
+                    return;
+                }
+                updateCartUI();
+            }
+        };
+
+        // 2. Eliminar producto completo con el tacho de basura (ej. si hay 20 unidades, elimina las 20)
+        window.removeFromCart = function(id) {
+            var itemIndex = cart.findIndex(i => i.id === id);
+            if (itemIndex > -1) {
+                var removedItem = cart[itemIndex];
+                
+                // EVENTO GA4: remove_from_cart (Envía valor total y cantidad eliminada)
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'event': 'remove_from_cart',
+                    'ecommerce': {
+                        'currency': 'ARS',
+                        'value': removedItem.price * removedItem.quantity,
+                        'items': [{
+                            'item_id': removedItem.id,
+                            'item_name': removedItem.name,
+                            'price': removedItem.price,
+                            'quantity': removedItem.quantity
+                        }]
+                    }
+                });
+
+                cart.splice(itemIndex, 1);
+                updateCartUI();
+            }
+        };
+
+        // 3. Vaciar todo el carrito de un solo clic
+        window.clearCart = function() {
+            if (cart.length === 0) return;
+            if (confirm('¿Estás seguro de que querés vaciar todo el carrito?')) {
+                cart.forEach(function(item) {
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                        'event': 'remove_from_cart',
+                        'ecommerce': {
+                            'currency': 'ARS',
+                            'value': item.price * item.quantity,
+                            'items': [{
+                                'item_id': item.id,
+                                'item_name': item.name,
+                                'price': item.price,
+                                'quantity': item.quantity
+                            }]
+                        }
+                    });
+                });
+                cart = [];
+                updateCartUI();
+            }
+        };
+
+        // 4. Actualizar la interfaz del carrito y badges
+        function updateCartUI() {
+            var cartCountElem = document.getElementById('cart-count');
+            var cartItemsElem = document.getElementById('cart-items');
+            var cartTotalElem = document.getElementById('cart-total');
+            var cartSubHeaderElem = document.getElementById('cart-sub-header');
+
+            var totalUnits = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if(cartCountElem) cartCountElem.innerText = totalUnits;
+
+            if (cart.length === 0) {
+                if(cartItemsElem) cartItemsElem.innerHTML = '<p style="color:#888; text-align:center; padding: 20px 0;">El carrito está vacío.</p>';
+                if(cartTotalElem) cartTotalElem.innerText = 'Total: $0';
+                if(cartSubHeaderElem) cartSubHeaderElem.style.display = 'none';
+                return;
+            }
+
+            if(cartSubHeaderElem) cartSubHeaderElem.style.display = 'flex';
+
+            var html = '';
+            var totalAmount = 0;
+
+            cart.forEach(function(item) {
+                var itemSubtotal = item.price * item.quantity;
+                totalAmount += itemSubtotal;
+
+                html += `
+                    <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                        <div style="flex-grow:1;">
+                            <p class="cart-item-title" style="margin:0; font-weight:600; font-size:0.9em; color:#1a1a1a;">${item.name}</p>
+                            <span class="cart-item-price" style="color:#a3704c; font-size:0.85em;">
+                                $${item.price.toLocaleString('es-AR')} x ${item.quantity} = <strong>$${itemSubtotal.toLocaleString('es-AR')}</strong>
+                            </span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <button type="button" onclick="window.changeQuantity('${item.id}', -1)" style="background:#e8e4df; border:none; width:26px; height:26px; cursor:pointer; border-radius:3px; font-weight:bold; font-size:1em;" title="Restar una unidad">-</button>
+                            <span style="font-size:0.9em; font-weight:bold; min-width:20px; text-align:center;">${item.quantity}</span>
+                            <button type="button" onclick="window.changeQuantity('${item.id}', 1)" style="background:#e8e4df; border:none; width:26px; height:26px; cursor:pointer; border-radius:3px; font-weight:bold; font-size:1em;" title="Sumar una unidad">+</button>
+                            <button type="button" onclick="window.removeFromCart('${item.id}')" style="background:transparent; border:none; color:#c0392b; cursor:pointer; font-size:1.2em; margin-left:4px;" title="Eliminar este producto completo">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if(cartItemsElem) cartItemsElem.innerHTML = html;
+            if(cartTotalElem) cartTotalElem.innerText = 'Total: $' + totalAmount.toLocaleString('es-AR');
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             
             // --- 1. ABRIR MODAL DE DETALLES ---
-var detailElements = document.querySelectorAll('.btn-detail');
-detailElements.forEach(function(elem) {
-    elem.addEventListener('click', function(e) {
-        var card = elem.closest('.card');
-        
-        // Lee directamente la imagen visible en la tarjeta
-        var visibleImg = card.querySelector('.card-img').getAttribute('src');
+            var detailElements = document.querySelectorAll('.btn-detail');
+            detailElements.forEach(function(elem) {
+                elem.addEventListener('click', function(e) {
+                    var card = elem.closest('.card');
+                    var visibleImg = card.querySelector('.card-img').getAttribute('src');
 
-        activeProduct = {
-            id: card.getAttribute('data-id'),
-            name: card.getAttribute('data-name'),
-            category: card.getAttribute('data-category'),
-            price: parseFloat(card.getAttribute('data-price')),
-            img: visibleImg, // Usa la imagen actual del HTML
-            desc: card.getAttribute('data-desc'),
-            specs: card.getAttribute('data-specs')
-        };
+                    activeProduct = {
+                        id: card.getAttribute('data-id'),
+                        name: card.getAttribute('data-name'),
+                        category: card.getAttribute('data-category'),
+                        price: parseFloat(card.getAttribute('data-price')),
+                        img: visibleImg,
+                        desc: card.getAttribute('data-desc'),
+                        specs: card.getAttribute('data-specs')
+                    };
 
-        document.getElementById('modal-img').src = activeProduct.img;
-        document.getElementById('modal-title').innerText = activeProduct.name;
-        document.getElementById('modal-price').innerText = '$' + activeProduct.price.toLocaleString('es-AR');
-        document.getElementById('modal-desc').innerText = activeProduct.desc;
-        document.getElementById('modal-specs').innerText = activeProduct.specs;
+                    document.getElementById('modal-img').src = activeProduct.img;
+                    document.getElementById('modal-title').innerText = activeProduct.name;
+                    document.getElementById('modal-price').innerText = '$' + activeProduct.price.toLocaleString('es-AR');
+                    document.getElementById('modal-desc').innerText = activeProduct.desc;
+                    document.getElementById('modal-specs').innerText = activeProduct.specs;
 
-        document.getElementById('product-modal').style.display = 'flex';
+                    document.getElementById('product-modal').style.display = 'flex';
 
-                    // EVENTO GA4: view_item (Ver producto)
+                    // EVENTO GA4: view_item
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({
                         'event': 'view_item',
@@ -465,9 +587,7 @@ detailElements.forEach(function(elem) {
                 document.getElementById('product-modal').style.display = 'none';
             });
 
-            // --- 2. LÓGICA DE CARRITO (CANTIDADES Y ELIMINACIÓN) ---
-
-            // 1. Agregar producto al carrito (suma cantidad si ya existe)
+            // --- 2. LÓGICA DE AGREGAR AL CARRITO ---
             function addToCart(product) {
                 var existingItem = cart.find(i => i.id === product.id);
                 
@@ -480,7 +600,7 @@ detailElements.forEach(function(elem) {
                 
                 updateCartUI();
                 
-                // Evento Ecommerce GA4: add_to_cart
+                // EVENTO GA4: add_to_cart
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
                     'event': 'add_to_cart',
@@ -498,91 +618,7 @@ detailElements.forEach(function(elem) {
                 });
             }
 
-            // 2. Cambiar cantidad (+ / -) desde el carrito
-            function changeQuantity(id, delta) {
-                var item = cart.find(i => i.id === id);
-                if (item) {
-                    item.quantity += delta;
-                    if (item.quantity <= 0) {
-                        removeFromCart(id);
-                        return;
-                    }
-                    updateCartUI();
-                }
-            }
-
-            // 3. Eliminar producto con el tacho de basura
-            function removeFromCart(id) {
-                var itemIndex = cart.findIndex(i => i.id === id);
-                if (itemIndex > -1) {
-                    var removedItem = cart[itemIndex];
-                    
-                    // Evento Ecommerce GA4: remove_from_cart
-                    window.dataLayer = window.dataLayer || [];
-                    window.dataLayer.push({
-                        'event': 'remove_from_cart',
-                        'ecommerce': {
-                            'currency': 'ARS',
-                            'value': removedItem.price * removedItem.quantity,
-                            'items': [{
-                                'item_id': removedItem.id,
-                                'item_name': removedItem.name,
-                                'price': removedItem.price,
-                                'quantity': removedItem.quantity
-                            }]
-                        }
-                    });
-
-                    cart.splice(itemIndex, 1);
-                    updateCartUI();
-                }
-            }
-
-            // 4. Renderizar la interfaz del carrito y calcular totales
-            function updateCartUI() {
-                var cartCountElem = document.getElementById('cart-count');
-                var cartItemsElem = document.getElementById('cart-items');
-                var cartTotalElem = document.getElementById('cart-total');
-
-                var totalUnits = cart.reduce((sum, item) => sum + item.quantity, 0);
-                if(cartCountElem) cartCountElem.innerText = totalUnits;
-
-                if (cart.length === 0) {
-                    if(cartItemsElem) cartItemsElem.innerHTML = '<p style="color:#888; text-align:center; padding: 20px 0;">El carrito está vacío.</p>';
-                    if(cartTotalElem) cartTotalElem.innerText = 'Total: $0';
-                    return;
-                }
-
-                var html = '';
-                var totalAmount = 0;
-
-                cart.forEach(function(item) {
-                    var itemSubtotal = item.price * item.quantity;
-                    totalAmount += itemSubtotal;
-
-                    html += `
-                        <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                            <div style="flex-grow:1;">
-                                <p class="cart-item-title" style="margin:0; font-weight:600; font-size:0.9em; color:#1a1a1a;">${item.name}</p>
-                                <span class="cart-item-price" style="color:#a3704c; font-size:0.85em;">
-                                    $${item.price.toLocaleString('es-AR')} x ${item.quantity} = <strong>$${itemSubtotal.toLocaleString('es-AR')}</strong>
-                                </span>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:6px;">
-                                <button type="button" onclick="changeQuantity('${item.id}', -1)" style="background:#e8e4df; border:none; width:26px; height:26px; cursor:pointer; border-radius:3px; font-weight:bold; font-size:1em;">-</button>
-                                <span style="font-size:0.9em; font-weight:bold; min-width:16px; text-align:center;">${item.quantity}</span>
-                                <button type="button" onclick="changeQuantity('${item.id}', 1)" style="background:#e8e4df; border:none; width:26px; height:26px; cursor:pointer; border-radius:3px; font-weight:bold; font-size:1em;">+</button>
-                                <button type="button" onclick="removeFromCart('${item.id}')" style="background:transparent; border:none; color:#c0392b; cursor:pointer; font-size:1.2em; margin-left:6px;" title="Eliminar producto">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                if(cartItemsElem) cartItemsElem.innerHTML = html;
-                if(cartTotalElem) cartTotalElem.innerText = 'Total: $' + totalAmount.toLocaleString('es-AR');
-            }
-
-            // Escuchadores de eventos para los botones de las tarjetas y modal
+            // Botones de añadir al carrito desde la tarjeta
             var addCartBtns = document.querySelectorAll('.btn-add-cart');
             addCartBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
@@ -622,7 +658,7 @@ detailElements.forEach(function(elem) {
                 });
             }
 
-            // Abrir y Cerrar Panel Lateral del Carrito
+            // Abrir/Cerrar Panel Lateral del Carrito
             var openCartBtn = document.getElementById('btn-open-cart');
             if(openCartBtn) {
                 openCartBtn.addEventListener('click', function() {
@@ -637,7 +673,15 @@ detailElements.forEach(function(elem) {
                 });
             }
 
-            // Checkout / Comprar (Envío de Venta a Google Sheets + GA4)
+            // Botón Vaciar Carrito (si existe en el sub-header)
+            var clearCartBtn = document.getElementById('btn-clear-cart');
+            if(clearCartBtn) {
+                clearCartBtn.addEventListener('click', function() {
+                    window.clearCart();
+                });
+            }
+
+            // --- 3. CHECKOUT / COMPRAR ---
             function triggerCheckout() {
                 if(cart.length === 0) {
                     alert('Tu carrito está vacío.');
@@ -645,11 +689,8 @@ detailElements.forEach(function(elem) {
                 }
                 
                 var total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-                // Reemplaza esta URL con tu enlace de Apps Script:
                 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhv5iJ7utsjae9RRct1-cu8K3t0OPwS-oBw0zLV31SjTFsn3mcdFqrrHG5t0fXBUk--A/exec";
 
-                // Datos de la compra para enviar a Google Sheets
                 var saleData = {
                     action: "sale",
                     items: cart
@@ -663,7 +704,7 @@ detailElements.forEach(function(elem) {
                     body: JSON.stringify(saleData)
                 });
 
-                // Evento GA4: begin_checkout
+                // EVENTO GA4: begin_checkout
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
                     'event': 'begin_checkout',
@@ -685,7 +726,7 @@ detailElements.forEach(function(elem) {
                 checkoutBtn.addEventListener('click', triggerCheckout);
             }
 
-            // Clic WhatsApp
+            // EVENTO GA4: whatsapp_click
             var wsBtn = document.getElementById('btn-whatsapp');
             if(wsBtn) {
                 wsBtn.addEventListener('click', function() {
@@ -697,7 +738,7 @@ detailElements.forEach(function(elem) {
                 });
             }
 
-            // --- LÓGICA DE ENVÍO DE LEADS A GOOGLE SHEETS ---
+            // --- 4. LÓGICA DE ENVÍO DE LEADS ---
             var leadForm = document.getElementById('lead-form');
             if(leadForm) {
                 leadForm.addEventListener('submit', function(e) {
@@ -728,7 +769,7 @@ detailElements.forEach(function(elem) {
                         statusElem.style.color = "#27ae60";
                         leadForm.reset();
 
-                        // Evento GA4: generate_lead
+                        // EVENTO GA4: generate_lead
                         window.dataLayer = window.dataLayer || [];
                         window.dataLayer.push({
                             'event': 'generate_lead',
@@ -743,5 +784,3 @@ detailElements.forEach(function(elem) {
             }
         });
     </script>
-</body>
-</html>
