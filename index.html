@@ -387,6 +387,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <option value="Mayorista">Interés Mayorista / Distribuidor</option>
                 </select>
                 
+                <label style="display: flex; align-items: flex-start; gap: 10px; text-align: left; font-size: 0.85em; color: #555; cursor: pointer; margin: 5px 0;">
+                    <input type="checkbox" id="lead-consentimiento" required style="margin-top: 3px; cursor: pointer;">
+                    <span>Acepto que mis datos sean utilizados con fines académicos y/o para análisis de datos en la facultad.</span>
+                </label>
+
                 <button type="submit" class="btn" style="padding: 12px; background-color: #a3704c; color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 1em; cursor: pointer;">
                     Recibir Catálogo
                 </button>
@@ -739,48 +744,50 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
 
             // --- 4. LÓGICA DE ENVÍO DE LEADS ---
-            var leadForm = document.getElementById('lead-form');
-            if(leadForm) {
-                leadForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
+var leadForm = document.getElementById('lead-form');
+if(leadForm) {
+    leadForm.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-                    var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhv5iJ7utsjae9RRct1-cu8K3t0OPwS-oBw0zLV31SjTFsn3mcdFqrrHG5t0fXBUk--A/exec"; 
+        var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhv5iJ7utsjae9RRct1-cu8K3t0OPwS-oBw0zLV31SjTFsn3mcdFqrrHG5t0fXBUk--A/exec"; 
 
-                    var leadData = {
-                        nombre: document.getElementById('lead-nombre').value,
-                        apellido: document.getElementById('lead-apellido').value,
-                        email: document.getElementById('lead-email').value,
-                        tipo: document.getElementById('lead-tipo').value
-                    };
+        var leadData = {
+            nombre: document.getElementById('lead-nombre').value,
+            apellido: document.getElementById('lead-apellido').value,
+            email: document.getElementById('lead-email').value,
+            tipo: document.getElementById('lead-tipo').value,
+            acepta_uso_academico: document.getElementById('lead-consentimiento').checked
+        };
 
-                    var statusElem = document.getElementById('lead-status');
-                    statusElem.innerText = "Enviando tus datos...";
-                    statusElem.style.color = "#a3704c";
-                    statusElem.style.display = "block";
+        var statusElem = document.getElementById('lead-status');
+        statusElem.innerText = "Enviando tus datos...";
+        statusElem.style.color = "#a3704c";
+        statusElem.style.display = "block";
 
-                    fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(leadData)
-                    })
-                    .then(function() {
-                        statusElem.innerText = "¡Gracias! Te enviamos el catálogo a tu correo.";
-                        statusElem.style.color = "#27ae60";
-                        leadForm.reset();
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leadData)
+        })
+        .then(function() {
+            statusElem.innerText = "¡Gracias! Te enviamos el catálogo a tu correo.";
+            statusElem.style.color = "#27ae60";
+            leadForm.reset();
 
-                        // EVENTO GA4: generate_lead
-                        window.dataLayer = window.dataLayer || [];
-                        window.dataLayer.push({
-                            'event': 'generate_lead',
-                            'lead_type': leadData.tipo
-                        });
-                    })
-                    .catch(function(error) {
-                        statusElem.innerText = "Ocurrió un error. Por favor intentá de nuevo.";
-                        statusElem.style.color = "#c0392b";
-                    });
-                });
-            }
+            // EVENTO GA4: generate_lead
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'generate_lead',
+                'lead_type': leadData.tipo,
+                'academic_consent': leadData.acepta_uso_academico
+            });
+        })
+        .catch(function(error) {
+            statusElem.innerText = "Ocurrió un error. Por favor intentá de nuevo.";
+            statusElem.style.color = "#c0392b";
+        });
+    });
+}
         });
     </script>
